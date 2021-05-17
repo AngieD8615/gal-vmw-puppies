@@ -43,7 +43,7 @@ public class PuppyController {
     public ResponseEntity<Puppy> addPuppy(@RequestBody Puppy addedPuppy) {
         Puppy newlyAddedPuppy;
         try {
-            newlyAddedPuppy = puppyDataService.addPuppy();
+            newlyAddedPuppy = puppyDataService.addPuppy(addedPuppy);
         } catch (Exception e){
             return ResponseEntity.badRequest().build();
         }

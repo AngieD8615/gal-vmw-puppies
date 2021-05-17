@@ -15,11 +15,11 @@ public class PuppyDataService {
     }
 
     public PuppyList getPuppies(String s_n, String status) {
-        return null;
+        return new PuppyList(puppyRepository.findByS_nContainsAndStatusContains(s_n, status));
     }
 
-    public Puppy addPuppy() {
-        return null;
+    public Puppy addPuppy(Puppy puppy) {
+        return puppyRepository.save(puppy);
     }
 
     public Puppy getPuppyById(String id) {

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -110,7 +111,7 @@ public class PuppyControllerTests {
                                         Puppy.Tail.CURLS, "dog");
         addedPuppy.setId(100);
         String json = mapper.writeValueAsString(addedPuppy);
-        when(puppyDataService.addPuppy()).thenReturn(addedPuppy);
+        when(puppyDataService.addPuppy(any(Puppy.class))).thenReturn(addedPuppy);
 
         mockMvc.perform(post("/api/puppies")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -124,7 +125,7 @@ public class PuppyControllerTests {
     @Test
     void addPuppy_invalid_returnBadRequest () throws Exception {
 
-        when(puppyDataService.addPuppy()).thenThrow(new InvalidPuppyException());
+        when(puppyDataService.addPuppy(any(Puppy.class))).thenThrow(new InvalidPuppyException());
 
         mockMvc.perform(post("/api/puppies")
                 .contentType(MediaType.APPLICATION_JSON)
