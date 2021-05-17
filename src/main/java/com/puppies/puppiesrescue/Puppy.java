@@ -1,6 +1,12 @@
 package com.puppies.puppiesrescue;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "puppies")
 public class Puppy {
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String name;
     private String color;
