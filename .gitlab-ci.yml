@@ -12,7 +12,7 @@ build-rescue:
   artifacts:
     paths:
       - build/libs/*.jar
-    expire_in:
+    expire_in: 30 days
 
 test:
   image: adoptopenjdk:11
@@ -41,7 +41,7 @@ codeCoverage:
 docker:
   image: docker:20
   needs:
-    - build-autos
+    - build-rescue
     - test
   stage: docker
   services:
