@@ -1,13 +1,10 @@
 package com.puppies.puppiesrescue;
 
-import java.util.Date;
-
 public class Puppy {
     private long id;
     private String name;
     private String color;
     private Status status;
-    private Date dateOfBirth;
     private boolean s_n = false;
     private Tail tail;
     private String breed;
@@ -26,7 +23,6 @@ public class Puppy {
         this.name = name;
         this.color = color;
         this.status = status;
-        this.dateOfBirth = dateOfBirth;
         this.s_n = s_n;
         this.tail = tail;
         this.breed = breed;
@@ -62,14 +58,6 @@ public class Puppy {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
     }
 
     public boolean isS_n() {

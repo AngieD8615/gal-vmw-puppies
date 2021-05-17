@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,7 +42,12 @@ public class puppyControllerTests {
         puppies = new ArrayList<>();
         Random r = new Random();
         for (int i = 0; i < 25; i++){
-            puppies.add(new Puppy("name" + i, colors[r.nextInt(100) % 5], statusOpt[r.nextInt(100) % 4], true, tailOpt[r.nextInt(100) % 3], "breed" + i));
+            Puppy curPuppy = new Puppy("name" + i, colors[r.nextInt(100) % 5],
+                    statusOpt[r.nextInt(100) % 4], true,
+                    tailOpt[r.nextInt(100) % 3], "breed" + i);
+            curPuppy.setId(i);
+
+            puppies.add(curPuppy);
         }
     }
 
@@ -64,11 +70,45 @@ public class puppyControllerTests {
     }
 
     @Test
+    void getById_exists_returnPuppy () throws Exception {
+        Puppy puppyExists = new Puppy("newPup", "white",
+                Puppy.Status.READY, true,
+                Puppy.Tail.CURLS, "dog");
+        puppyExists.setId(100);
+
+        when(puppyDataService.getPuppyById(anyString())).thenReturn(puppyExists);
+
+        mockMvc.perform(get("/api/puppies/100"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value("newPup"))
+                .andExpect(jsonPath("id").value("100"))
+                .andExpect(jsonPath("color").value("white"));
+    }
+
+    @Test
+    void getById_doesNotExists_returnNoContent () throws Exception {
+        when(puppyDataService.getPuppyById(anyString())).thenReturn(null);
+
+        mockMvc.perform(get("/api/puppies/100"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void getAll_withParams_snAndStatus_exists_returnPuppyList () throws Exception {
+        when(puppyDataService.getPuppies(anyString(), anyString())).thenReturn(new PuppyList(puppies));
+
+        mockMvc.perform(get("/api/puppies?s_n=true&status=SICK"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.puppies", hasSize(25)));
+    }
+
+    @Test
     void addPuppy_Success_returnPuppy () throws Exception {
 
         Puppy addedPuppy = new Puppy("newPup", "white",
                                         Puppy.Status.READY, true,
                                         Puppy.Tail.CURLS, "dog");
+        addedPuppy.setId(100);
         String json = mapper.writeValueAsString(addedPuppy);
         when(puppyDataService.addPuppy()).thenReturn(addedPuppy);
 
@@ -77,6 +117,7 @@ public class puppyControllerTests {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("name").value("newPup"))
+                .andExpect(jsonPath("id").value("100"))
                 .andExpect(jsonPath("status").value("READY"));
     }
 
@@ -90,4 +131,5 @@ public class puppyControllerTests {
                 .content("{\"message\":\"bad\"}"))
                 .andExpect(status().isBadRequest());
     }
+
 }
