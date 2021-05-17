@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -77,7 +76,7 @@ public class PuppyControllerTests {
                 Puppy.Tail.CURLS, "dog");
         puppyExists.setId(100);
 
-        when(puppyDataService.getPuppyById(anyString())).thenReturn(puppyExists);
+        when(puppyDataService.getPuppyById(anyLong())).thenReturn(puppyExists);
 
         mockMvc.perform(get("/api/puppies/100"))
                 .andExpect(status().isOk())
@@ -88,7 +87,7 @@ public class PuppyControllerTests {
 
     @Test
     void getById_doesNotExists_returnNoContent () throws Exception {
-        when(puppyDataService.getPuppyById(anyString())).thenReturn(null);
+        when(puppyDataService.getPuppyById(anyLong())).thenReturn(null);
 
         mockMvc.perform(get("/api/puppies/100"))
                 .andExpect(status().isNoContent());

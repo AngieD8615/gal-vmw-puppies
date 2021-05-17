@@ -13,15 +13,15 @@ public class PuppyController {
     }
 
     @GetMapping
-    public ResponseEntity<PuppyList> getAllPuppies(@RequestParam(required = false) String s_n,
+    public ResponseEntity<PuppyList> getAllPuppies(@RequestParam(required = false) String sn,
                                                    @RequestParam(required = false) String status) {
         PuppyList puppyList;
-        if(s_n == null && status == null) {
+        if(sn == null && status == null) {
             puppyList = puppyDataService.getPuppies();
         } else {
-            if (s_n == null) s_n = "";
+            if (sn == null) sn = "";
             if (status == null) status = "";
-            puppyList = puppyDataService.getPuppies(s_n, status);
+            puppyList = puppyDataService.getPuppies(sn, status);
         }
 
         return puppyList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(puppyList);
@@ -29,7 +29,7 @@ public class PuppyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Puppy> getPuppyById(@PathVariable String id) {
+    public ResponseEntity<Puppy> getPuppyById(@PathVariable Long id) {
         Puppy puppy = puppyDataService.getPuppyById(id);
         if (puppy == null) {
             return ResponseEntity.noContent().build();

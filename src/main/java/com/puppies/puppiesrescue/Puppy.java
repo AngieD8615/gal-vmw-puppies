@@ -6,12 +6,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "puppies")
 public class Puppy {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String color;
     private Status status;
-    private boolean s_n = false;
+    private boolean sn = false;
     private Tail tail;
     private String breed;
 
@@ -25,11 +25,11 @@ public class Puppy {
 
     public Puppy() {}
 
-    public Puppy(String name, String color, Status status, boolean s_n, Tail tail, String breed) {
+    public Puppy(String name, String color, Status status, boolean sn, Tail tail, String breed) {
         this.name = name;
         this.color = color;
         this.status = status;
-        this.s_n = s_n;
+        this.sn = sn;
         this.tail = tail;
         this.breed = breed;
     }
@@ -66,12 +66,12 @@ public class Puppy {
         this.status = status;
     }
 
-    public boolean isS_n() {
-        return s_n;
+    public boolean isSn() {
+        return sn;
     }
 
-    public void setS_n(boolean s_n) {
-        this.s_n = s_n;
+    public void setSn(boolean sn) {
+        this.sn = sn;
     }
 
     public Tail getTail() {

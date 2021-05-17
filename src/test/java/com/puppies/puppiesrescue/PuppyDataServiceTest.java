@@ -7,10 +7,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,7 +45,7 @@ class PuppyDataServiceTest {
                 Puppy.Status.READY, true,
                 Puppy.Tail.CURLS, "dog");
 
-        when(puppyRepository.findByS_nContainsAndStatusContains(anyString(), anyString()))
+        when(puppyRepository.findBySnContainsAndStatusContains(anyString(), anyString()))
                 .thenReturn(Arrays.asList(puppy));
         PuppyList puppyList = puppyDataService.getPuppies("true", "TOO_YOUNG");
         assertThat(puppyList).isNotNull();
@@ -53,7 +53,7 @@ class PuppyDataServiceTest {
     }
 
     @Test
-    void addPuppy() {
+    void addPuppy_valid_returnsPuppy() {
         Puppy puppy = new Puppy("newPup", "white",
                 Puppy.Status.READY, true,
                 Puppy.Tail.CURLS, "dog");
@@ -66,6 +66,24 @@ class PuppyDataServiceTest {
     }
 
     @Test
-    void getPuppyById() {
+    void addPuppy_invalid_returnsNoContent() {
+        when(puppyRepository.save(any(Puppy.class)))
+                .thenReturn(null);
+        Puppy puppy = puppyDataService.addPuppy(new Puppy());
+        assertThat(puppy).isNull();
+    }
+
+    @Test
+    void getPuppyById_valid_returnPuppy() {
+        Puppy puppy = new Puppy("newPup", "white",
+                Puppy.Status.READY, true,
+                Puppy.Tail.CURLS, "dog");
+        when(puppyRepository.findById(anyLong()))
+                .thenReturn(Optional.of(puppy));
+
+        Puppy puppyActual = puppyDataService.getPuppyById(99L);
+        assertThat(puppyActual).isNotNull();
+        assertThat(puppyActual.getName()).isEqualTo("newPup");
+
     }
 }
