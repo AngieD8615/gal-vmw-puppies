@@ -41,7 +41,7 @@ codeCoverage:
 docker:
   image: docker:20
   needs:
-    - build-autos
+    - build-rescue
     - test
   stage: docker
   services:
